@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+  --color-campus-primary: #0F766E;
+  --color-campus-primary-light: #14B8A6;
+  --color-campus-primary-lighter: #CCFBF1;
+  --color-campus-primary-dark: #115E59;
+  --color-campus-primary-50: #F0FDFA;
+  --color-campus-primary-100: #CCFBF1;
+  --color-campus-primary-200: #99F6E4;
+  --color-campus-primary-300: #5EEAD4;
+  --color-campus-primary-400: #2DD4BF;
+  --color-campus-primary-500: #14B8A6;
+  --color-campus-primary-600: #0D9488;
+  --color-campus-primary-700: #0F766E;
+  --color-campus-primary-800: #115E59;
+  --color-campus-primary-900: #134E4A;
+  --color-campus-primary-950: #042F2E;
+
+  --color-campus-neutral-50: #F8FAFC;
+  --color-campus-neutral-100: #F1F5F9;
+  --color-campus-neutral-200: #E2E8F0;
+  --color-campus-neutral-300: #CBD5E1;
+  --color-campus-neutral-400: #94A3B8;
+  --color-campus-neutral-500: #64748B;
+  --color-campus-neutral-600: #475569;
+  --color-campus-neutral-700: #334155;
+  --color-campus-neutral-800: #1E293B;
+  --color-campus-neutral-900: #0F172A;
+  --color-campus-neutral-950: #020617;
+
+  --color-campus-background: #FFFFFF;
+  --color-campus-surface: #F8FAFC;
+  --color-campus-surface-raised: #FFFFFF;
+  --color-campus-text-primary: #0F172A;
+  --color-campus-text-secondary: #475569;
+  --color-campus-text-tertiary: #94A3B8;
+  --color-campus-border: #E2E8F0;
+  --color-campus-border-light: #F1F5F9;
+
+  --font-campus-display: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
+  --font-campus-body: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-campus-body);
+    background-color: var(--color-campus-background);
+    color: var(--color-campus-text-primary);
+  }
+}
+
+@layer utilities {
+  .campus-display-lg {
+    font-family: var(--font-campus-display);
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .campus-display-md {
+    font-family: var(--font-campus-display);
+    font-size: 2.5rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .campus-display-sm {
+    font-family: var(--font-campus-display);
+    font-size: 1.875rem;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .campus-h1 {
+    font-family: var(--font-campus-body);
+    font-size: 2.25rem;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .campus-h2 {
+    font-family: var(--font-campus-body);
+    font-size: 1.5rem;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .campus-h3 {
+    font-family: var(--font-campus-body);
+    font-size: 1.25rem;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  .campus-body-lg {
+    font-family: var(--font-campus-body);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  .campus-body {
+    font-family: var(--font-campus-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  .campus-body-sm {
+    font-family: var(--font-campus-body);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .campus-caption {
+    font-family: var(--font-campus-body);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .campus-label {
+    font-family: var(--font-campus-body);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

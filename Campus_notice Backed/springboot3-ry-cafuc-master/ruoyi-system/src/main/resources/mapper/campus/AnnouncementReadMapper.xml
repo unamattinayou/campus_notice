@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.campus.AnnouncementReadMapper">
+
+    <resultMap type="com.ruoyi.system.domain.campus.AnnouncementRead" id="AnnouncementReadResult">
+        <result property="id"             column="id"              />
+        <result property="announcementId" column="announcement_id" />
+        <result property="userId"         column="user_id"         />
+        <result property="readTime"       column="read_time"       />
+        <result property="deleted"        column="deleted"         />
+        <result property="createTime"     column="create_time"     />
+    </resultMap>
+
+    <insert id="insertAnnouncementRead" parameterType="com.ruoyi.system.domain.campus.AnnouncementRead" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_announcement_read (announcement_id, user_id, read_time, create_time)
+        values (#{announcementId}, #{userId}, sysdate(), sysdate())
+    </insert>
+
+    <select id="selectByAnnouncementIdAndUserId" resultMap="AnnouncementReadResult">
+        select id, announcement_id, user_id, read_time, deleted, create_time
+        from tb_announcement_read
+        where announcement_id = #{announcementId} and user_id = #{userId} and deleted = 0
+    </select>
+
+</mapper>

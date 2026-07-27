@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.campus.CategoryMapper">
+
+    <resultMap type="com.ruoyi.system.domain.campus.Category" id="CategoryResult">
+        <result property="id"           column="id"            />
+        <result property="categoryName" column="category_name" />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="deleted"      column="deleted"       />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
+        <result property="remark"       column="remark"        />
+    </resultMap>
+
+    <sql id="selectCategoryVo">
+        select id, category_name, sort_order, deleted, create_by, create_time, update_by, update_time, remark
+        from tb_category
+    </sql>
+
+    <select id="selectCategoryList" parameterType="com.ruoyi.system.domain.campus.Category" resultMap="CategoryResult">
+        <include refid="selectCategoryVo"/>
+        where deleted = 0
+        <if test="categoryName != null and categoryName != ''">
+            and category_name like concat('%', #{categoryName}, '%')
+        </if>
+        order by sort_order asc
+    </select>
+
+    <select id="selectCategoryById" parameterType="Long" resultMap="CategoryResult">
+        <include refid="selectCategoryVo"/>
+        where id = #{id} and deleted = 0
+    </select>
+
+    <select id="selectAllCategories" resultMap="CategoryResult">
+        <include refid="selectCategoryVo"/>
+        where deleted = 0
+        order by sort_order asc
+    </select>
+
+    <insert id="insertCategory" parameterType="com.ruoyi.system.domain.campus.Category" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_category (
+            <if test="categoryName != null and categoryName != ''">category_name,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="remark != null">remark,</if>
+            create_time
+        ) values (
+            <if test="categoryName != null and categoryName != ''">#{categoryName},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateCategory" parameterType="com.ruoyi.system.domain.campus.Category">
+        update tb_category
+        <set>
+            <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="deleteCategoryById" parameterType="Long">
+        update tb_category set deleted = 1, update_time = sysdate() where id = #{id}
+    </update>
+
+</mapper>

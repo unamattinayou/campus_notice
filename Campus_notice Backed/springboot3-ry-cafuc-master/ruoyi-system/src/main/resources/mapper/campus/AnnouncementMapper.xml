@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.campus.AnnouncementMapper">
+
+    <resultMap type="com.ruoyi.system.domain.campus.Announcement" id="AnnouncementResult">
+        <result property="id"              column="id"              />
+        <result property="title"           column="title"           />
+        <result property="content"         column="content"         />
+        <result property="summary"         column="summary"         />
+        <result property="categoryId"      column="category_id"     />
+        <result property="status"          column="status"          />
+        <result property="publisherId"     column="publisher_id"    />
+        <result property="publisherName"   column="publisher_name"  />
+        <result property="reviewerId"      column="reviewer_id"     />
+        <result property="reviewComment"   column="review_comment"  />
+        <result property="publishTime"     column="publish_time"    />
+        <result property="expireTime"      column="expire_time"     />
+        <result property="isTop"           column="is_top"          />
+        <result property="viewCount"       column="view_count"      />
+        <result property="deleted"         column="deleted"         />
+        <result property="createBy"        column="create_by"       />
+        <result property="createTime"      column="create_time"     />
+        <result property="updateBy"        column="update_by"       />
+        <result property="updateTime"      column="update_time"     />
+        <result property="remark"          column="remark"          />
+        <result property="categoryName"    column="category_name"   />
+    </resultMap>
+
+    <sql id="selectAnnouncementVo">
+        select a.id, a.title, a.content, a.summary, a.category_id, a.status,
+               a.publisher_id, a.publisher_name, a.reviewer_id, a.review_comment,
+               a.publish_time, a.expire_time, a.is_top, a.view_count, a.deleted,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark,
+               c.category_name
+        from tb_announcement a
+        left join tb_category c on a.category_id = c.id and c.deleted = 0
+    </sql>
+
+    <select id="selectAnnouncementList" parameterType="com.ruoyi.system.domain.campus.Announcement" resultMap="AnnouncementResult">
+        <include refid="selectAnnouncementVo"/>
+        where a.deleted = 0
+        <if test="title != null and title != ''">
+            and a.title like concat('%', #{title}, '%')
+        </if>
+        <if test="categoryId != null">
+            and a.category_id = #{categoryId}
+        </if>
+        <if test="status != null">
+            and a.status = #{status}
+        </if>
+        <if test="publisherId != null">
+            and a.publisher_id = #{publisherId}
+        </if>
+        <if test="params.keyword != null and params.keyword != ''">
+            and (a.title like concat('%', #{params.keyword}, '%') or a.summary like concat('%', #{params.keyword}, '%'))
+        </if>
+        order by a.is_top desc, a.create_time desc
+    </select>
+
+    <select id="selectAnnouncementById" parameterType="Long" resultMap="AnnouncementResult">
+        <include refid="selectAnnouncementVo"/>
+        where a.id = #{id} and a.deleted = 0
+    </select>
+
+    <insert id="insertAnnouncement" parameterType="com.ruoyi.system.domain.campus.Announcement" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_announcement (
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null">content,</if>
+            <if test="summary != null">summary,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="status != null">status,</if>
+            <if test="publisherId != null">publisher_id,</if>
+            <if test="publisherName != null">publisher_name,</if>
+            <if test="isTop != null">is_top,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="remark != null">remark,</if>
+            create_time
+        ) values (
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="summary != null">#{summary},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="publisherId != null">#{publisherId},</if>
+            <if test="publisherName != null">#{publisherName},</if>
+            <if test="isTop != null">#{isTop},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateAnnouncement" parameterType="com.ruoyi.system.domain.campus.Announcement">
+        update tb_announcement
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="summary != null">summary = #{summary},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="isTop != null">is_top = #{isTop},</if>
+            <if test="expireTime != null">expire_time = #{expireTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="deleteAnnouncementById" parameterType="Long">
+        update tb_announcement set deleted = 1, update_time = sysdate() where id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        update tb_announcement
+        <set>
+            status = #{status},
+            reviewer_id = #{reviewerId},
+            review_comment = #{reviewComment},
+            <if test="status == 2">
+                publish_time = sysdate(),
+            </if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="incrementViewCount" parameterType="Long">
+        update tb_announcement set view_count = view_count + 1 where id = #{id}
+    </update>
+
+    <select id="selectOverviewStats" resultType="java.util.HashMap">
+        select
+            (select count(*) from tb_announcement where deleted = 0) as announcementCount,
+            (select count(*) from sys_user where del_flag = '0') as userCount,
+            (select ifnull(sum(view_count), 0) from tb_announcement where deleted = 0) as totalViews,
+            (select count(*) from tb_announcement where deleted = 0 and date(create_time) = curdate()) as todayCount
+        from dual
+    </select>
+
+    <select id="selectCategoryDistribution" resultType="java.util.HashMap">
+        select c.category_name as name, count(a.id) as value
+        from tb_category c
+        left join tb_announcement a on a.category_id = c.id and a.deleted = 0 and a.status = 2
+        where c.deleted = 0
+        group by c.id, c.category_name
+        order by c.sort_order
+    </select>
+
+    <select id="selectPublishTrend" resultType="java.util.HashMap">
+        select date_format(publish_time, '%Y-%m-%d') as date, count(*) as count
+        from tb_announcement
+        where deleted = 0 and status = 2
+          and publish_time >= date_sub(curdate(), interval #{days} day)
+        group by date_format(publish_time, '%Y-%m-%d')
+        order by date
+    </select>
+
+</mapper>

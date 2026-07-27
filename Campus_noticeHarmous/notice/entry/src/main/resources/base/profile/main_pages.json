@@ -1,0 +1,6 @@
+{
+  "src": [
+    "pages/main",
+    "pages/NoticeDetailPage"
+  ]
+}

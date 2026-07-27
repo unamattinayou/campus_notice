@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.campus.AttachmentMapper">
+
+    <resultMap type="com.ruoyi.system.domain.campus.Attachment" id="AttachmentResult">
+        <result property="id"             column="id"              />
+        <result property="announcementId" column="announcement_id" />
+        <result property="fileName"       column="file_name"       />
+        <result property="filePath"       column="file_path"       />
+        <result property="fileSize"       column="file_size"       />
+        <result property="deleted"        column="deleted"         />
+        <result property="createTime"     column="create_time"     />
+        <result property="updateTime"     column="update_time"     />
+    </resultMap>
+
+    <insert id="insertAttachment" parameterType="com.ruoyi.system.domain.campus.Attachment" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_attachment (
+            announcement_id, file_name, file_path, file_size, create_time
+        ) values (
+            #{announcementId}, #{fileName}, #{filePath}, #{fileSize}, sysdate()
+        )
+    </insert>
+
+    <select id="selectAttachmentsByAnnouncementId" parameterType="Long" resultMap="AttachmentResult">
+        select id, announcement_id, file_name, file_path, file_size, deleted, create_time, update_time
+        from tb_attachment
+        where announcement_id = #{announcementId} and deleted = 0
+    </select>
+
+    <select id="selectAttachmentById" parameterType="Long" resultMap="AttachmentResult">
+        select id, announcement_id, file_name, file_path, file_size, deleted, create_time, update_time
+        from tb_attachment
+        where id = #{id} and deleted = 0
+    </select>
+
+    <update id="deleteAttachmentById" parameterType="Long">
+        update tb_attachment set deleted = 1, update_time = sysdate() where id = #{id}
+    </update>
+
+</mapper>

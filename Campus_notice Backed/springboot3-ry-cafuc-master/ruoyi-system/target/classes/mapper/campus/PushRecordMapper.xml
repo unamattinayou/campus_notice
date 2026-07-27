@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.campus.PushRecordMapper">
+
+    <resultMap type="com.ruoyi.system.domain.campus.PushRecord" id="PushRecordResult">
+        <result property="id"                column="id"                />
+        <result property="announcementId"    column="announcement_id"   />
+        <result property="targetUserId"      column="target_user_id"    />
+        <result property="isRead"            column="is_read"           />
+        <result property="readTime"          column="read_time"         />
+        <result property="deleted"           column="deleted"           />
+        <result property="createTime"        column="create_time"       />
+        <result property="updateTime"        column="update_time"       />
+        <result property="announcementTitle" column="announcement_title"/>
+    </resultMap>
+
+    <insert id="insertPushRecord" parameterType="com.ruoyi.system.domain.campus.PushRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_push_record (announcement_id, target_user_id, is_read, create_time)
+        values (#{announcementId}, #{targetUserId}, #{isRead}, sysdate())
+    </insert>
+
+    <insert id="batchInsertPushRecords">
+        insert into tb_push_record (announcement_id, target_user_id, is_read, create_time) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.announcementId}, #{item.targetUserId}, #{item.isRead}, sysdate())
+        </foreach>
+    </insert>
+
+    <select id="selectPushRecordsByUserId" parameterType="Long" resultMap="PushRecordResult">
+        select pr.id, pr.announcement_id, pr.target_user_id, pr.is_read, pr.read_time,
+               pr.deleted, pr.create_time, pr.update_time,
+               a.title as announcement_title
+        from tb_push_record pr
+        left join tb_announcement a on pr.announcement_id = a.id and a.deleted = 0
+        where pr.target_user_id = #{userId} and pr.deleted = 0
+        order by pr.create_time desc
+    </select>
+
+    <update id="updateReadStatus">
+        update tb_push_record set is_read = #{isRead}, read_time = sysdate(), update_time = sysdate()
+        where id = #{id}
+    </update>
+
+    <select id="countUnreadByUserId" parameterType="Long" resultType="int">
+        select count(*) from tb_push_record
+        where target_user_id = #{userId} and is_read = 0 and deleted = 0
+    </select>
+
+</mapper>

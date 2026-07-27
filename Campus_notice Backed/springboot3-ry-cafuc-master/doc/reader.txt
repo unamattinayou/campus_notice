@@ -1,0 +1,4 @@
+
+ruoyi-framework\src\main\java\com\ruoyi\framework\config\SecurityConfig.java 文件的114行增加
+ .....  "/oa/list").permitAll()
+ 可以跳过权限校验
