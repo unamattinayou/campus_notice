@@ -31,23 +31,18 @@
 
         <!-- Featured News -->
         <div v-if="activeCategory === '全部' && featuredNews" class="mb-10">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-campus-surface-raised border border-campus-border rounded-2xl overflow-hidden">
-            <div class="h-72 lg:h-auto overflow-hidden">
-              <img :src="featuredNews.image" :alt="featuredNews.title" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+          <div class="bg-campus-surface-raised border border-campus-border rounded-2xl p-8 hover:shadow-lg transition-shadow duration-300">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2.5 py-0.5 bg-red-50 text-red-600 text-xs font-semibold rounded-full">置顶</span>
+              <span class="px-2.5 py-0.5 bg-campus-primary-50 text-campus-primary text-xs font-semibold rounded-full">{{ featuredNews.category }}</span>
             </div>
-            <div class="p-8 flex flex-col justify-center">
-              <div class="flex items-center gap-2 mb-3">
-                <span class="px-2.5 py-0.5 bg-red-50 text-red-600 text-xs font-semibold rounded-full">置顶</span>
-                <span class="px-2.5 py-0.5 bg-campus-primary-50 text-campus-primary text-xs font-semibold rounded-full">{{ featuredNews.category }}</span>
-              </div>
-              <h2 class="campus-h1 mb-3">{{ featuredNews.title }}</h2>
-              <p class="text-sm text-campus-text-secondary leading-relaxed mb-4">{{ featuredNews.summary }}</p>
-              <div class="flex items-center justify-between">
-                <span class="text-xs text-campus-text-tertiary">{{ featuredNews.publishDate }}</span>
-                <router-link :to="`/news/${featuredNews.id}`" class="text-sm font-medium text-campus-primary no-underline hover:underline flex items-center gap-1">
-                  阅读全文 <ChevronRight class="w-4 h-4" />
-                </router-link>
-              </div>
+            <h2 class="campus-h1 mb-3">{{ featuredNews.title }}</h2>
+            <p class="text-sm text-campus-text-secondary leading-relaxed mb-4">{{ featuredNews.summary }}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-campus-text-tertiary">{{ featuredNews.publishDate }}</span>
+              <router-link :to="`/news/${featuredNews.id}`" class="text-sm font-medium text-campus-primary no-underline hover:underline flex items-center gap-1">
+                阅读全文 <ChevronRight class="w-4 h-4" />
+              </router-link>
             </div>
           </div>
         </div>
@@ -57,23 +52,18 @@
           <article
             v-for="item in filteredNews"
             :key="item.id"
-            class="group bg-campus-surface-raised border border-campus-border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            class="group bg-campus-surface-raised border border-campus-border rounded-xl p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           >
-            <div class="h-48 overflow-hidden">
-              <img :src="item.image" :alt="item.title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
+                :class="getCategoryClass(item.category)">{{ item.category }}</span>
+              <span class="text-xs text-campus-text-tertiary">{{ item.publishDate }}</span>
             </div>
-            <div class="p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
-                  :class="getCategoryClass(item.category)">{{ item.category }}</span>
-                <span class="text-xs text-campus-text-tertiary">{{ item.publishDate }}</span>
-              </div>
-              <h3 class="campus-h3 mb-2 line-clamp-2">{{ item.title }}</h3>
-              <p class="text-sm text-campus-text-secondary leading-relaxed line-clamp-2 mb-3">{{ item.summary }}</p>
-              <router-link :to="`/news/${item.id}`" class="text-sm font-medium text-campus-primary no-underline hover:underline flex items-center gap-1">
-                阅读全文 <ChevronRight class="w-4 h-4" />
-              </router-link>
-            </div>
+            <h3 class="campus-h3 mb-2 line-clamp-2">{{ item.title }}</h3>
+            <p class="text-sm text-campus-text-secondary leading-relaxed line-clamp-3 mb-3">{{ item.summary }}</p>
+            <router-link :to="`/news/${item.id}`" class="text-sm font-medium text-campus-primary no-underline hover:underline flex items-center gap-1">
+              阅读全文 <ChevronRight class="w-4 h-4" />
+            </router-link>
           </article>
         </div>
 
@@ -182,20 +172,19 @@ const formatDateStr = (date) => {
 const featuredNews = ref({
   id: 0, title: '我校计算机科学学科进入 ESI 全球前 1%',
   summary: '根据科睿唯安最新发布的 ESI 数据，我校计算机科学学科首次进入全球前 1%，标志着该学科的国际影响力迈上新台阶。近年来，学校大力加强学科建设，引进了一批高层次人才，科研实力持续提升。',
-  category: '学术', publishDate: '2026-07-15',
-  image: images.newsFeatured
+  category: '学术', publishDate: '2026-07-15'
 })
 
 const allNews = ref([
-  { id: 1, title: '我校科研团队获国家重点研发计划立项', summary: '计算机科学与生命科学交叉研究团队成功获批国家重点研发计划项目，将在人工智能辅助药物发现领域展开深入探索。', category: '学术', publishDate: '2026-07-10', image: images.newsResearch },
-  { id: 2, title: '第十二届校园文化艺术节圆满落幕', summary: '历时两周的校园文化艺术节吸引了近万名师生参与，涵盖音乐、戏剧、书法、摄影等多个板块。', category: '校园', publishDate: '2026-07-05', image: images.newsFestival },
-  { id: 3, title: '2026年秋季学期开学安排公告', summary: '2026年秋季学期将于9月1日正式开学，新生报到时间为8月28日至30日，请各位同学做好相关准备。', category: '通知', publishDate: '2026-06-28', image: images.newsAutumnCampus },
-  { id: 4, title: '我校学生在全国大学生数学建模竞赛中获佳绩', summary: '6 支队伍获得全国一等奖，12 支队伍获得全国二等奖，参赛规模和获奖数量均创历史新高。', category: '荣誉', publishDate: '2026-06-20', image: images.newsCompetition },
-  { id: 5, title: '牛犇大学-华为联合实验室揭牌成立', summary: '双方将在 5G/6G 通信、边缘计算和智能终端等领域展开深度合作，联合培养高层次技术人才。', category: '学术', publishDate: '2026-06-15', image: images.newsLabOpening },
-  { id: 6, title: '校园美食节精彩来袭', summary: '来自全国各地 50 多种特色美食齐聚校园，还有厨艺大赛和美食品鉴等互动环节等你来。', category: '校园', publishDate: '2026-06-10', image: images.newsFoodFest },
-  { id: 7, title: '关于暑期校园施工安全的通知', summary: '暑期期间部分教学楼将进行维修改造，请注意施工区域的安全提示，合理安排学习和出行。', category: '通知', publishDate: '2026-06-05', image: images.newsConstruction },
-  { id: 8, title: '校友企业家返校分享创业经验', summary: '20 余位成功创业校友重返母校，与在校学子分享创业历程和行业洞察。', category: '校园', publishDate: '2026-06-01', image: images.newsAlumni },
-  { id: 9, title: '我校教授入选国家"万人计划"', summary: '计算机学院张明远教授、材料学院王建国教授入选国家高层次人才特殊支持计划。', category: '荣誉', publishDate: '2026-05-25', image: images.newsAward }
+  { id: 1, title: '我校科研团队获国家重点研发计划立项', summary: '计算机科学与生命科学交叉研究团队成功获批国家重点研发计划项目，将在人工智能辅助药物发现领域展开深入探索。', category: '学术', publishDate: '2026-07-10' },
+  { id: 2, title: '第十二届校园文化艺术节圆满落幕', summary: '历时两周的校园文化艺术节吸引了近万名师生参与，涵盖音乐、戏剧、书法、摄影等多个板块。', category: '校园', publishDate: '2026-07-05' },
+  { id: 3, title: '2026年秋季学期开学安排公告', summary: '2026年秋季学期将于9月1日正式开学，新生报到时间为8月28日至30日，请各位同学做好相关准备。', category: '通知', publishDate: '2026-06-28' },
+  { id: 4, title: '我校学生在全国大学生数学建模竞赛中获佳绩', summary: '6 支队伍获得全国一等奖，12 支队伍获得全国二等奖，参赛规模和获奖数量均创历史新高。', category: '荣誉', publishDate: '2026-06-20' },
+  { id: 5, title: '牛犇大学-华为联合实验室揭牌成立', summary: '双方将在 5G/6G 通信、边缘计算和智能终端等领域展开深度合作，联合培养高层次技术人才。', category: '学术', publishDate: '2026-06-15' },
+  { id: 6, title: '校园美食节精彩来袭', summary: '来自全国各地 50 多种特色美食齐聚校园，还有厨艺大赛和美食品鉴等互动环节等你来。', category: '校园', publishDate: '2026-06-10' },
+  { id: 7, title: '关于暑期校园施工安全的通知', summary: '暑期期间部分教学楼将进行维修改造，请注意施工区域的安全提示，合理安排学习和出行。', category: '通知', publishDate: '2026-06-05' },
+  { id: 8, title: '校友企业家返校分享创业经验', summary: '20 余位成功创业校友重返母校，与在校学子分享创业历程和行业洞察。', category: '校园', publishDate: '2026-06-01' },
+  { id: 9, title: '我校教授入选国家"万人计划"', summary: '计算机学院张明远教授、材料学院王建国教授入选国家高层次人才特殊支持计划。', category: '荣誉', publishDate: '2026-05-25' }
 ])
 
 const filteredNews = computed(() => {

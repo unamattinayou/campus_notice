@@ -3,6 +3,9 @@ package net.biancheng.campusspringboot.service;
 import net.biancheng.campusspringboot.entity.*;
 import net.biancheng.campusspringboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -48,6 +51,26 @@ public class CampusService {
 
     public List<News> getAllNews() {
         return newsRepository.findAllPublishedOrderByTopAndPublishDateDesc();
+    }
+
+    public Page<News> getNewsPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return newsRepository.findAllPublishedOrderByTopAndPublishDateDesc(pageable);
+    }
+
+    public Page<News> getNewsPageByCategory(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return newsRepository.findByCategoryPublished(category, pageable);
+    }
+
+    public Page<News> searchNews(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return newsRepository.searchByKeyword(keyword, pageable);
+    }
+
+    public Page<News> searchNewsByCategory(String keyword, String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return newsRepository.searchByKeywordAndCategory(keyword, category, pageable);
     }
 
     public Optional<News> getNewsById(Long id) {

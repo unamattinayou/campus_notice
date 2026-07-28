@@ -4,6 +4,7 @@ import { DepartmentsTab } from '../components/portal/DepartmentsTab';
 import { AdmissionsTab } from '../components/portal/AdmissionsTab';
 import { ResearchTab } from '../components/portal/ResearchTab';
 import { CampusLifeTab } from '../components/portal/CampusLifeTab';
+import { ChartTab } from '../components/tabs/ChartTab';
 import { getPublishedNotices, searchNotices, Notice } from '../http/noticeApi';
 import { SearchBar } from '../components/SearchBar';
 import { CategoryTab } from '../components/CategoryTab';
@@ -15,7 +16,7 @@ import { categoryLabelList, getRealCategory } from '../components/CategoryMap';
 struct MainPage {
   @State currentTab: number = 0;
   private tabsController: TabsController = new TabsController();
-  private tabLabels: string[] = ['首页', '院系', '招生', '科研', '生活', '公告', '我的'];
+  private tabLabels: string[] = ['首页', '院系', '招生', '科研', '生活', '公告', '分布', '我的'];
 
   @State searchKey: string = "";
   @State selectedCategory: string = "全部";
@@ -65,7 +66,7 @@ struct MainPage {
   onTabChange(index: number): void {
     this.currentTab = index;
     this.tabsController.changeIndex(index);
-    if (index === 5) {
+    if (index === 6) {
       this.loadAnnouncementData();
     }
   }
@@ -193,7 +194,7 @@ struct MainPage {
           .backgroundColor('#FFFFFF')
           .borderRadius(10)
           .onClick(() => {
-            this.onTabChange(5);
+            this.onTabChange(6);
           })
 
           Row() {
@@ -275,12 +276,13 @@ struct MainPage {
         TabContent() { ResearchTab() }
         TabContent() { CampusLifeTab() }
         TabContent() { this.NoticeQueryContent() }
+        TabContent() { ChartTab() }
         TabContent() { this.ProfileContent() }
       }
       .layoutWeight(1)
       .onChange((index: number) => {
         this.currentTab = index;
-        if (index === 5) {
+        if (index === 6) {
           this.loadAnnouncementData();
         }
       })
@@ -316,7 +318,7 @@ struct MainPage {
   }
 
   getTabIcon(index: number): string {
-    const icons: string[] = ['⌂', '∄', '✎', '⚛', '★', '⚙', '◉'];
+    const icons: string[] = ['⌂', '∄', '✎', '⚛', '★', '⚙','📊', '◉'];
     return icons[index] || '•';
   }
 }
